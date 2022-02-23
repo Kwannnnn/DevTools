@@ -1,5 +1,9 @@
 # Checkstyle Configuration
 
+Authors:
+* Kristiyan Tenev - 449302
+* Quan Nguyen - 490848
+
 ## 1. Method Length
 
 Lengthy methods tend to become too complex and that makes them difficult to understand. This checkstyle prevents that by setting the maximum length for a method to **60 lines**, enforcing breaking long methods into individual methods that focus on a specific task.
@@ -106,6 +110,24 @@ public static void main(String[] args) {
 
 ## 5. One Statement Per Line
 
+This checkstyle prevents having multiple statements on the same line. There are two main reasons for this: it is very difficult to read, and in case of an exception it might become difficult to trace.
+
+#### Accepted examples
+```java
+public static void main(String[] args) {
+    int a = 0;
+    boolean b = true;
+    char c = 'c';
+}
+```
+
+#### Not accepted examples
+```java
+public static void main(String[] args) {
+    int a = 0; boolean b = true; char c = 'c';
+}
+```
+
 ## 6. If Nesting
 
 Deeply nested code becomes very difficult to read and maintain. This configuration enforces a maximum level of if depth of 1, meaning that there can be only one if statement inside an if statement.
@@ -164,6 +186,8 @@ public void handleCommand(String command) {
 ```
 
 ## 8. JavaDoc 
+
+Documentation is a very important aspect of programming. This configuration checks whether all public methods have JavaDoc generated.
 
 ## 9. 
 
