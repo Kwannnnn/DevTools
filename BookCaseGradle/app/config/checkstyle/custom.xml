@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!--
+    Authors: Kristiyan Tenev & Quan Nguyen.
+ -->
+ 
+<module name = "Checker">
+    <!-- tabs are represented by 4 spaces -->
+    <property name="tabWidth" value="4"/>
+
+    <module name="TreeWalker">
+        <module name="MethodLength">
+            <!-- A method should have no more than 60 lines -->
+            <property name="max" value="60"/>
+        </module>
+        <module name="ConstantName">
+            <!-- A constant name should be allcaps  -->
+            <property name="format" value="^log(ger)?$|^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$" />
+        </module>
+        <module name="LeftCurly">
+            <!-- The left curly brace should be on the same line as the
+            class or function declaration, and can have maximum line length of 100
+            to avoid very long lines  -->
+            <property name="maxLineLength" value="100"/>
+        </module>
+        <!-- Right curly brace should be alone on the line;
+        exceptions: TRY, CATCH, FINALLY, IF, ELSE  -->
+        <module name="RightCurly" />
+        <!-- Tabs are used for indentation -->
+        <module name="Indentation" />
+        <!-- Allows only one statement per line 
+        int a = 1; int b = 2 will be a violation -->
+        <module name="OneStatementPerLine">
+            <!-- Make an exception for declarations in a try block -->
+            <property name="treatTryResourcesAsStatement" value="false"/>
+        </module>
+        <module name="JavadocMethod">
+            <!-- JavaDoc is only required for public methods -->
+            <property name="scope" value="public" />
+        </module>
+        <!-- Makes sure that switch statement has a default case -->
+        <module name="MissingSwitchDefault" />
+    </module>
+</module>
