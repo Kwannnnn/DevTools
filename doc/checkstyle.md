@@ -14,6 +14,8 @@ An well-known Java convention is that constants should be all uppercase with wor
 ```java
 public static final String CONSTANT = "Good constant";
 public static final String GOOD_CONSTANT = "Another good constant";
+private static final String GOOD_PRIVATE_CONSTANT = "A good PRIVATE constant";
+protected static final int PROTECTED_CONST = 37;
 ```
 
 #### Not accepted examples
@@ -61,17 +63,107 @@ public void veryLongLine(String veryLongVariableName1, String veryLongVariableNa
 
 ### 3.2. Right Curly Brace
 
-The closing curly brace should be alone on a line. This checkstyle increases readability.
+The closing curly brace should be alone on a line. This checkstyle increases readability. Exceptions to this rule:
+
+* **try ... catch ... finally** blocks
+* **if ... else (if)** blocks
+
+#### Accepted examples
+```java
+public static void main(String[] args) {
+    String name = args[0];
+
+    if(name.length > 32) {
+        System.out.println("Name is too long!");
+    // OK - else statement is an exception
+    } else if(name.length < 3) {
+        System.out.println("Name is too short!");
+    // OK - else statement is an exception
+    } else {
+        System.out.println("Hello, " + name);
+    } // OK
+} // OK
+```
+
+#### Not accepted examples
+```java
+public static void main(String[] args) {
+    System.out.println("Hello world!"); } /* NOT OK - Closing brace
+                                             is on the same line as
+                                             the last statement */
+```
+
+```java
+public static void main(String[] args) {
+    System.out.println("Hello world!");
+// NOT OK - Closing brace is not the only character on the line
+} private boolean isValid() {
+    return false;
+}
+```
 
 ## 4. Indentation
 
-## 5. One Staement Per Line
+## 5. One Statement Per Line
 
-## 6. Switch Default Case
+## 6. If Nesting
 
-## 7. JavaDoc
+Deeply nested code becomes very difficult to read and maintain. This configuration enforces a maximum level of if depth of 1, meaning that there can be only one if statement inside an if statement.
 
-## 8. 
+#### Accepted examples
+```java
+public static void main(String[] args) {
+    if(true) { // 0
+        if(true) { // 1
+            // OK
+        }
+    }
+}
+```
+
+#### Not accepted examples
+```java
+public static void main(String[] args) {
+    if(true) { // 0
+        if(true) { // 1
+            if(true) { // 2
+                // NOT OK - nested if-else depth is 2
+                // max depth alloweed is 1
+            }
+        }
+    }
+}
+```
+
+## 7. Switch Default Case
+
+This checkstyle ensures that a switch statement contains a default clause. This is done to prevent the program to crash if the argument to the switch statement is not handled by any of the cases.
+
+#### Accepted examples
+```java
+public void handleCommand(String command) {
+    return switch(command) {
+        case "SAVE" -> handleSave();
+        case "OK" -> handleOk();
+        case "CANCEL" -> handleCancel();
+        default -> throw new IllegalArgumentException(); // OK
+    }
+}
+```
+
+#### Not accepted examples
+```java
+public void handleCommand(String command) {
+    return switch(command) {
+        case "SAVE" -> handleSave();
+        case "OK" -> handleOk();
+        case "CANCEL" -> handleCancel();
+        // NOT OK - default case is missing
+    }
+}
+```
+
+## 8. JavaDoc 
 
 ## 9. 
 
