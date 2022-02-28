@@ -7,6 +7,7 @@ import org.saxion.devtools.week2.bookcase.model.BookCase;
 import org.saxion.devtools.week2.bookcase.model.exceptions.BookCaseOutOfRoomException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class Application {
         ArrayList<Book> result = new ArrayList<>();
 
         try {
-            String jsonString = new String(Files.readAllBytes(Paths.get(fileName)));
+            String jsonString = new String(Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
             JSONObject booksObject = new JSONObject(jsonString);
 
             JSONArray books = booksObject.getJSONArray("books");
