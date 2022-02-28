@@ -59,7 +59,8 @@ public class BookCaseTest {
         assertEquals(foundBooks.get(0).getAuthor(), sampleBook.getAuthor());
     }
 
-    public void findBookByAuthorNotExists() throws BookNotFoundException {
+    @Test
+    public void findBookByAuthorNotExists() {
         BookCase bookCase = new BookCase(1);
 
         // Not adding the book.
@@ -70,4 +71,109 @@ public class BookCaseTest {
     }
 
     // Obviously we're far from done! But you get the idea..
+
+    @Test
+    public void checkIfBookCaseHasNoSpace() {
+        BookCase bookCase = new BookCase(-1);
+
+        assertFalse((bookCase.hasSpace()));
+    }
+
+    @Test
+    public void findBookByAuthorNamesDoNotMatch() throws BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(1);
+
+        bookCase.addBook(sampleBook);
+
+        assertThrows(BookNotFoundException.class, () -> {
+            bookCase.findBooksByAuthor("Not a matching name");
+        });
+    }
+
+    @Test
+    public void findBookByTitleExists() throws BookNotFoundException, BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(1);
+
+        bookCase.addBook(this.sampleBook);
+
+        Book foundBook = bookCase.findBookByTitle(this.sampleBook.getTitle());
+
+        assertEquals(foundBook.getTitle(), this.sampleBook.getTitle());
+    }
+
+    @Test
+    public void findBookByTitleNotMatching() throws BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(1);
+
+        bookCase.addBook(this.sampleBook);
+
+        assertThrows(BookNotFoundException.class, () -> {
+            bookCase.findBookByTitle("Not a matching title");
+        });
+    }
+
+    @Test
+    public void findBookByTitleNotExists() {
+        BookCase bookCase = new BookCase(1);
+
+        // Not adding the book.
+
+        assertThrows(BookNotFoundException.class, () -> {
+            bookCase.findBookByTitle(this.sampleBook.getTitle());
+        });
+    }
+
+    @Test
+    public void removeBookByTitleExists() throws BookNotFoundException, BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(1);
+
+        bookCase.addBook(this.sampleBook);
+
+        bookCase.removeBookByTitle(this.sampleBook.getTitle());
+    }
+
+    @Test
+    public void removeBookByTitleNotExists() {
+        BookCase bookCase = new BookCase(1);
+
+        // Not adding the book.
+
+        assertThrows(BookNotFoundException.class, () -> {
+            bookCase.removeBookByTitle(this.sampleBook.getTitle());
+        });
+    }
+
+    @Test
+    public void toStringNoBooks() {
+        BookCase bookCase = new BookCase(1);
+
+        String expectedResult = "";
+
+        assertEquals(bookCase.toString(), expectedResult);
+    }
+
+    @Test
+    public void toStringOneBook() throws BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(1);
+
+        bookCase.addBook(this.sampleBook);
+        String expectedResult = this.sampleBook.toString() + System.lineSeparator();
+
+        assertEquals(bookCase.toString(), expectedResult);
+    }
+
+    @Test
+    public void toStringMultipleBooks() throws BookCaseOutOfRoomException {
+        BookCase bookCase = new BookCase(2);
+
+        bookCase.addBook(this.sampleBook);
+        bookCase.addBook(this.sampleBook);
+
+        String expectedResult = this.sampleBook.toString()
+                                + System.lineSeparator()
+                                + this.sampleBook.toString()
+                                + System.lineSeparator();
+
+        assertEquals(bookCase.toString(), expectedResult);
+    }
 }
