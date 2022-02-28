@@ -10,7 +10,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'checkstyle'
-    id "com.github.spotbugs" version "5.0.6"
+    id 'com.github.spotbugs' version '5.0.6'
     id 'jacoco'
 }
 
@@ -38,20 +38,12 @@ application {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
 // Checkstyle
 checkstyle {
     toolVersion '7.8.1'
-    configFile file("config/checkstyle/checkstyle.xml")
-}
-
-checkstyleMain {
-    source ='src/main/java'
-}
-
-checkstyleTest {
-    source ='src/test/java'
 }
 
 // tasks.withType(Checkstyle) {
@@ -62,29 +54,23 @@ checkstyleTest {
 //     }
 // }
 
-//SpotBugs
-
-// spotbugsMain {
-//     reports {
-//         html {
-//             required = true
-//             outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
-//             stylesheet = 'fancy-hist.xsl'
-//         }
-//     }
-// }
-
-// JaCoCo
-
-test {
-    finalizedBy jacocoTestReport // report is always generated after tests run
+// SpotBugs
+spotbugsMain {
+    reports {
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/main/spotbugs.html")
+            stylesheet = 'fancy-hist.xsl'
+        }
+    }
 }
 
+// JaCoCo
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
         xml.required = false
         csv.required = false
-        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
     }
 }
