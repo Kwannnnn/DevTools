@@ -29,15 +29,33 @@ build:
       - BookCaseGradle/core/build
       - BookCaseGradle/app/build
 
-test:
+checkstyle:
   stage: test
   script:
     - cd BookCaseGradle
-    - ./gradlew check
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
+    - ./gradlew checkstyleMain
+    - ./gradlew checkstyleTest
+  artifacts:
     paths:
-      - BookCaseGradle/core/build
-      - BookCaseGradle/app/build
-      - .gradle
+        - BookCaseGradle/core/build/reports/checkstyle
+        - BookCaseGradle/app/build/reports/checkstyle
+
+spotbugs:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew spotbugsMain
+    - ./gradlew spotbugsTest
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/spotbugs
+
+jacoco:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew jacocoTestCoverageVerification
+    - ./gradlew jacocoTestReport
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/jacoco        
