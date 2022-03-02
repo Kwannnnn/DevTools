@@ -29,6 +29,15 @@ build:
       - BookCaseGradle/core/build
       - BookCaseGradle/app/build
 
+junit:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew test
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/tests
+
 checkstyle:
   stage: test
   script:
