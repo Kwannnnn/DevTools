@@ -12,6 +12,7 @@ plugins {
     id 'checkstyle'
     id 'com.github.spotbugs' version '5.0.6'
     id 'jacoco'
+    id "org.sonarqube" version "3.3"
 }
 
 repositories {
@@ -69,8 +70,13 @@ spotbugsMain {
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
     reports {
+        xml.enabled true
         xml.required = false
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('reports/jacoco')
     }
+}
+
+tasks.named('sonarqube').configure {
+    dependsOn test
 }
