@@ -1,13 +1,4 @@
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Gradle.gitlab-ci.yml
-
-# This is the Gradle build system for JVM applications
-# https://gradle.org/
-# https://github.com/gradle/gradle
-
-image: gradle:jdk11
+image: gradle:jdk11-alpine
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
@@ -18,53 +9,79 @@ variables:
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
+  - cd BookCase
 
-build:
+stages:
+  - build
+  - test
+
+cache:
+  key: devtools-java-bookcase
+  paths:
+    - BookCase/.gradle/wrapper
+    - BookCase/.gradle/caches
+  policy: pull
+
+build-job:
   stage: build
   script:
-    - cd BookCase
-    - ./gradlew build --stacktrace
+    - ./gradlew --build-cache assemble
+  cache:
+    key: devtools-java-bookcase
+    paths:
+      - BookCase/.gradle/wrapper
+      - BookCase/.gradle/caches
+    policy: push
   artifacts:
     paths:
-      - BookCaseGradle/core/build
-      - BookCaseGradle/app/build
+      - BookCase/core/build/
+      - BookCase/app/build/
+    expire_in: 1 day
 
-junit:
+junit-job:
   stage: test
+  dependencies:
+    - build-job
   script:
-    - cd BookCase
     - ./gradlew test
   artifacts:
     paths:
         - BookCase/core/build/reports/tests
+    expire_in: 1 day
 
-checkstyle:
+checkstyle-job:
   stage: test
+  dependencies:
+    - build-job
   script:
-    - cd BookCase
     - ./gradlew checkstyleMain
     - ./gradlew checkstyleTest
   artifacts:
     paths:
         - BookCase/core/build/reports/checkstyle
         - BookCase/app/build/reports/checkstyle
+    expire_in: 1 day
 
-spotbugs:
+spotbugs-job:
   stage: test
+  dependencies:
+    - build-job
   script:
-    - cd BookCase
     - ./gradlew spotbugsMain
     - ./gradlew spotbugsTest
   artifacts:
     paths:
         - BookCase/core/build/reports/spotbugs
+    expire_in: 1 day
 
-jacoco:
+jacoco-job:
   stage: test
+  dependencies:
+    - build-job
   script:
-    - cd BookCase
     - ./gradlew jacocoTestCoverageVerification
     - ./gradlew jacocoTestReport
   artifacts:
     paths:
-        - BookCase/core/build/reports/jacoco        
+        - BookCase/core/build/reports/jacoco
+    expire_in: 1 day      
