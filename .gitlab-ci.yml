@@ -1,0 +1,70 @@
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Gradle.gitlab-ci.yml
+
+# This is the Gradle build system for JVM applications
+# https://gradle.org/
+# https://github.com/gradle/gradle
+
+image: gradle:jdk11
+
+# Disable the Gradle daemon for Continuous Integration servers as correctness
+# is usually a priority over speed in CI environments. Using a fresh
+# runtime for each build is more reliable since the runtime is completely
+# isolated from any previous builds.
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+build:
+  stage: build
+  script:
+    - cd BookCaseGradle
+    - ./gradlew build --stacktrace
+  artifacts:
+    paths:
+      - BookCaseGradle/core/build
+      - BookCaseGradle/app/build
+
+junit:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew test
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/tests
+
+checkstyle:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew checkstyleMain
+    - ./gradlew checkstyleTest
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/checkstyle
+        - BookCaseGradle/app/build/reports/checkstyle
+
+spotbugs:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew spotbugsMain
+    - ./gradlew spotbugsTest
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/spotbugs
+
+jacoco:
+  stage: test
+  script:
+    - cd BookCaseGradle
+    - ./gradlew jacocoTestCoverageVerification
+    - ./gradlew jacocoTestReport
+  artifacts:
+    paths:
+        - BookCaseGradle/core/build/reports/jacoco        
