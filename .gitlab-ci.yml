@@ -22,7 +22,7 @@ before_script:
 build:
   stage: build
   script:
-    - cd BookCaseGradle
+    - cd BookCase
     - ./gradlew build --stacktrace
   artifacts:
     paths:
@@ -32,39 +32,39 @@ build:
 junit:
   stage: test
   script:
-    - cd BookCaseGradle
+    - cd BookCase
     - ./gradlew test
   artifacts:
     paths:
-        - BookCaseGradle/core/build/reports/tests
+        - BookCase/core/build/reports/tests
 
 checkstyle:
   stage: test
   script:
-    - cd BookCaseGradle
+    - cd BookCase
     - ./gradlew checkstyleMain
     - ./gradlew checkstyleTest
   artifacts:
     paths:
-        - BookCaseGradle/core/build/reports/checkstyle
-        - BookCaseGradle/app/build/reports/checkstyle
+        - BookCase/core/build/reports/checkstyle
+        - BookCase/app/build/reports/checkstyle
 
 spotbugs:
   stage: test
   script:
-    - cd BookCaseGradle
+    - cd BookCase
     - ./gradlew spotbugsMain
     - ./gradlew spotbugsTest
   artifacts:
     paths:
-        - BookCaseGradle/core/build/reports/spotbugs
+        - BookCase/core/build/reports/spotbugs
 
 jacoco:
   stage: test
   script:
-    - cd BookCaseGradle
+    - cd BookCase
     - ./gradlew jacocoTestCoverageVerification
     - ./gradlew jacocoTestReport
   artifacts:
     paths:
-        - BookCaseGradle/core/build/reports/jacoco        
+        - BookCase/core/build/reports/jacoco        
