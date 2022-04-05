@@ -268,7 +268,21 @@ constructed will be functionally indistinguishable from the String passed as
 a parameter. The error `DM_STRING_CTOR` was therefore returned by the
 `DumbMethods` detector.
 
-# 3. Sonarqube instruction manual
+## 3. Added extra tests
+The following extra tests were added to reach 100% test coverage:
+
+- `checkIfBookCaseHasNoSpace`
+- `findBookByAuthorNamesDoNotMatch`
+- `findBookByTitleExists`
+- `findBookByTitleNotMatching`
+- `findBookByTitleNotExists`
+- `removeBookByTitleExists`
+- `removeBookByTitleNotExists`
+- `toStringNoBooks`
+- `toStringOneBook`
+- `toStringMultipleBooks`
+
+## 4. Sonarqube instruction manual
 
 To run `Sonarqube` on this gradle project, you need to have a running
 `Sonarqube` server on your local machine. Instructions can be found here:
@@ -285,14 +299,17 @@ process.
 Now you just need to run the sonarqube Gradle task to run a scan, with
 `./gradlew sonarqube`
 
-## 4. Zoo project errors
+## 5. Zoo project errors
 Below is the summary of the number of errors/bugs found after running all
 `test` and `check` gradle tasks on the project:
 
-- **checkStyleMain**: 1342 errors
-- **checkStyleTest**: 351 errors
+- **checkStyleMain**: 672 errors (using our configuration)
+- **checkStyleTest**: 70 errors (using our configuration)
 - **spotbugsMain**: 28 bugs
 - **test**: 3 failed tests
 
 More detailed information on each individual bug/error can be found in their
 corresponding auto-generated reports.
+
+## 6. GitLab CI Pipeline Screenshot
+![CI Pipeline Success](/doc/ci-pipeline.png)
